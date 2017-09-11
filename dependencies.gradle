@@ -11,7 +11,7 @@ ext {
                     target    : 25,
             ],
             support        : '25.3.0',
-            okhttp         : '3.1.2',
+            okhttp         : '3.9.0',
     ]
 
     libraries = [

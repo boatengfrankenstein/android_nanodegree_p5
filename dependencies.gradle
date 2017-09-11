@@ -2,6 +2,7 @@ ext {
     versions = [
             gradle_android : '2.3.3',
             gradle_versions: '0.15.0',
+            gradle_git     : '1.7.2',
             androidSdk     : [
                     compile   : 25,
                     buildTools: '25.0.2',
@@ -16,6 +17,7 @@ ext {
             build: [
                     gradleAndroid : "com.android.tools.build:gradle:${versions.gradle_android}",
                     gradleVersions: "com.github.ben-manes:gradle-versions-plugin:${versions.gradle_versions}",
+                    gradleGit     : "org.ajoberstar:gradle-git:${versions.gradle_git}",
             ],
             app  : [
                     supportV4   : "com.android.support:support-v4:${versions.support}",

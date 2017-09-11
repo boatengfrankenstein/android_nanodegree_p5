@@ -10,6 +10,7 @@ buildscript {
     dependencies {
         classpath libraries.build.gradleAndroid
         classpath libraries.build.gradleVersions
+        classpath libraries.build.gradleGit
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

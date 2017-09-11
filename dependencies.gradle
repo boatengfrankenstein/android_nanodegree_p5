@@ -1,19 +1,25 @@
 ext {
     versions = [
-            gradle_android: '2.3.3',
-            androidSdk    : [
+            gradle_android : '2.3.3',
+            gradle_versions: '0.15.0',
+            gradle_git     : '1.7.2',
+            dexcount       : '0.7.3',
+            androidSdk     : [
                     compile   : 25,
                     buildTools: '25.0.2',
                     min       : 19,
                     target    : 25,
             ],
-            support       : '25.3.0',
-            okhttp        : '3.1.2',
+            support        : '25.3.0',
+            okhttp         : '3.9.0',
     ]
 
     libraries = [
             build: [
-                    gradleAndroid: "com.android.tools.build:gradle:${versions.gradle_android}",
+                    gradleAndroid : "com.android.tools.build:gradle:${versions.gradle_android}",
+                    gradleVersions: "com.github.ben-manes:gradle-versions-plugin:${versions.gradle_versions}",
+                    gradleGit     : "org.ajoberstar:gradle-git:${versions.gradle_git}",
+                    gradleDexcount: "com.getkeepsafe.dexcount:dexcount-gradle-plugin:${versions.dexcount}",
             ],
             app  : [
                     supportV4   : "com.android.support:support-v4:${versions.support}",

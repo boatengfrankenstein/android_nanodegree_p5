@@ -1,7 +1,6 @@
-package com.example.xyzreader.remote;
+package eu.bquepab.xyzreader.remote;
 
 import android.util.Log;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 

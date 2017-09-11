@@ -18,7 +18,7 @@ android {
     buildToolsVersion versions.androidSdk.buildTools
 
     defaultConfig {
-        applicationId "com.example.xyzreader"
+        applicationId "eu.bquepab.xyzreader"
         minSdkVersion versions.androidSdk.min
         targetSdkVersion versions.androidSdk.target
 

@@ -20,16 +20,15 @@
  * -Changed package name
  */
 
-package com.example.xyzreader.data;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+package eu.bquepab.xyzreader.data;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Helper for building selection clauses for {@link SQLiteDatabase}. Each

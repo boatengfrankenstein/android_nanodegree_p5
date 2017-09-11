@@ -1,7 +1,7 @@
-package com.example.xyzreader.data;
+package eu.bquepab.xyzreader.data;
 
 import android.net.Uri;
-import com.example.xyzreader.BuildConfig;
+import eu.bquepab.xyzreader.BuildConfig;
 
 public class ItemsContract {
 	public static final String CONTENT_AUTHORITY = BuildConfig.APPLICATION_ID;
@@ -29,8 +29,8 @@ public class ItemsContract {
 	}
 
 	public static class Items implements ItemsColumns {
-		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.com.example.xyzreader.items";
-		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.com.example.xyzreader.items";
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.eu.bquepab.xyzreader.items";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.eu.bquepab.xyzreader.items";
 
         public static final String DEFAULT_SORT = PUBLISHED_DATE + " DESC";
 

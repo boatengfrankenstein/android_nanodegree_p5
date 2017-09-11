@@ -1,17 +1,14 @@
-package com.example.xyzreader.remote;
+package eu.bquepab.xyzreader.remote;
 
 import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONTokener;
-
 import java.io.IOException;
 import java.net.URL;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONTokener;
 
 public class RemoteEndpointUtil {
     private static final String TAG = "RemoteEndpointUtil";

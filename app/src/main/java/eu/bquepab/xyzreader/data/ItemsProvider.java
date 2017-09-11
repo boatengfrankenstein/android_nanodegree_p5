@@ -1,5 +1,4 @@
-
-package com.example.xyzreader.data;
+package eu.bquepab.xyzreader.data;
 
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
@@ -11,7 +10,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-
 import java.util.ArrayList;
 import java.util.List;
 

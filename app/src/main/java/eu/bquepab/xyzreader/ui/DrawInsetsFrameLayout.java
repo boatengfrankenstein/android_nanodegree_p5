@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.xyzreader.ui;
+package eu.bquepab.xyzreader.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -25,8 +25,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
-
-import com.example.xyzreader.R;
+import eu.bquepab.xyzreader.R;
 
 
 public class DrawInsetsFrameLayout extends FrameLayout {
@@ -153,7 +152,7 @@ public class DrawInsetsFrameLayout extends FrameLayout {
         }
     }
 
-    public static interface OnInsetsCallback {
-        public void onInsetsChanged(Rect insets);
+    public interface OnInsetsCallback {
+        void onInsetsChanged(Rect insets);
     }
 }

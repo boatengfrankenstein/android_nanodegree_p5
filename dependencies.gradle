@@ -1,0 +1,28 @@
+ext {
+    versions = [
+            gradle_android: '2.3.3',
+            androidSdk    : [
+                    compile   : 25,
+                    buildTools: '25.0.2',
+                    min       : 19,
+                    target    : 25,
+            ],
+            support       : '25.3.0',
+            okhttp        : '3.1.2',
+    ]
+
+    libraries = [
+            build: [
+                    gradleAndroid: "com.android.tools.build:gradle:${versions.gradle_android}",
+            ],
+            app  : [
+                    supportV4   : "com.android.support:support-v4:${versions.support}",
+                    supportV13  : "com.android.support:support-v13:${versions.support}",
+                    appCompat   : "com.android.support:appcompat-v7:${versions.support}",
+                    palette     : "com.android.support:palette-v7:${versions.support}",
+                    recyclerview: "com.android.support:recyclerview-v7:${versions.support}",
+                    cardview    : "com.android.support:cardview-v7:${versions.support}",
+                    okhttp      : "com.squareup.okhttp3:okhttp:${versions.okhttp}"
+            ],
+    ]
+}

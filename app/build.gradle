@@ -25,6 +25,12 @@ android {
         versionCode appVersionCode
         versionName appVersionName
     }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
+    }
 }
 
 dependencies {

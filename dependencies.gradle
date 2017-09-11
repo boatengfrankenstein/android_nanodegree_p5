@@ -1,0 +1,11 @@
+ext {
+    versions = [
+            gradle_android: '2.3.3',
+    ]
+
+    libraries = [
+            build = [
+                    gradleAndroid: "com.android.tools.build:gradle:${versions.gradle_android}",
+            ]
+    ]
+}

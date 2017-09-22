@@ -37,6 +37,7 @@ dependencies {
     compile libraries.app.supportV4
     compile libraries.app.supportV13
     compile libraries.app.appCompat
+    compile libraries.app.design
     compile libraries.app.palette
     compile libraries.app.recyclerview
     compile libraries.app.cardview

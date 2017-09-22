@@ -18,7 +18,7 @@
 <resources>
 
   <style name="AppTheme"
-    parent="@style/Theme.AppCompat.NoActionBar">
+    parent="@style/Theme.AppCompat.Light.NoActionBar">
 
     <item name="colorPrimary">@color/primaryColor</item>
     <item name="colorPrimaryDark">@color/primaryDarkColor</item>

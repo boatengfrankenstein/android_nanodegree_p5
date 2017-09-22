@@ -41,6 +41,7 @@ dependencies {
     compile libraries.app.recyclerview
     compile libraries.app.cardview
     compile libraries.app.okhttp
+    compile libraries.app.materialDimens
     compile files('libs/volley.jar')
 }
 

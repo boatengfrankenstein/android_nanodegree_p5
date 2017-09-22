@@ -43,7 +43,11 @@ dependencies {
     compile libraries.app.cardview
     compile libraries.app.okhttp
     compile libraries.app.materialDimens
+    compile libraries.app.butterknife
+
     compile files('libs/volley.jar')
+
+    annotationProcessor libraries.apt.butterknife
 }
 
 android.applicationVariants.all { variant ->

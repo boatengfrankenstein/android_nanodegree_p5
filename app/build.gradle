@@ -44,6 +44,7 @@ dependencies {
     compile libraries.app.okhttp
     compile libraries.app.materialDimens
     compile libraries.app.butterknife
+    compile libraries.app.timber
 
     compile files('libs/volley.jar')
 

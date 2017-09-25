@@ -14,6 +14,7 @@ ext {
             okhttp         : '3.9.0',
             materialDimens : '1.4',
             butterknife    : '8.8.1',
+            timber         : '4.5.1',
     ]
 
     libraries = [
@@ -33,7 +34,8 @@ ext {
                     cardview      : "com.android.support:cardview-v7:${versions.support}",
                     okhttp        : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
                     materialDimens: "com.dmitrymalkovich.android:material-design-dimens:${versions.materialDimens}",
-                    butterknife   : "com.jakewharton:butterknife:${versions.butterknife}"
+                    butterknife   : "com.jakewharton:butterknife:${versions.butterknife}",
+                    timber        : "com.jakewharton.timber:timber:${versions.timber}",
             ],
             apt  : [
                     butterknife: "com.jakewharton:butterknife-compiler:${versions.butterknife}",

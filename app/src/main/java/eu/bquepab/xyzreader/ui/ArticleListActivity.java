@@ -47,6 +47,8 @@ public class ArticleListActivity extends AppCompatActivity
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+        setSupportActionBar(mToolbar);
+
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {

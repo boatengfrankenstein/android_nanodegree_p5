@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.bquepab.xyzreader.R;
@@ -37,6 +38,8 @@ public class ArticleListActivity extends AppCompatActivity
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+    @BindInt(R.integer.list_column_count)
+    int numColumns;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +62,7 @@ public class ArticleListActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        registerReceiver(mRefreshingReceiver,
-                new IntentFilter(UpdaterService.BROADCAST_ACTION_STATE_CHANGE));
+        registerReceiver(mRefreshingReceiver, new IntentFilter(UpdaterService.BROADCAST_ACTION_STATE_CHANGE));
     }
 
     @Override
@@ -95,9 +97,7 @@ public class ArticleListActivity extends AppCompatActivity
         ArticleListAdapter adapter = new ArticleListAdapter(cursor, this);
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
-        int columnCount = getResources().getInteger(R.integer.list_column_count);
-        StaggeredGridLayoutManager sglm =
-                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(numColumns, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
     }
 

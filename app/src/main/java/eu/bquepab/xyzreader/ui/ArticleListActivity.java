@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.bquepab.xyzreader.R;
 import eu.bquepab.xyzreader.data.ArticleLoader;
+import eu.bquepab.xyzreader.data.ItemsContract;
 import eu.bquepab.xyzreader.data.UpdaterService;
 
 /**
@@ -25,8 +26,7 @@ import eu.bquepab.xyzreader.data.UpdaterService;
  * touched, lead to a {@link ArticleDetailActivity} representing item details. On tablets, the
  * activity presents a grid of items as cards.
  */
-public class ArticleListActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class ArticleListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, ArticleListAdapter.OnItemClickListener {
 
     private static final String TAG = ArticleListActivity.class.toString();
 
@@ -91,7 +91,7 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        ArticleListAdapter adapter = new ArticleListAdapter(cursor);
+        ArticleListAdapter adapter = new ArticleListAdapter(cursor, this);
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
@@ -103,5 +103,10 @@ public class ArticleListActivity extends AppCompatActivity implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mRecyclerView.setAdapter(null);
+    }
+
+    @Override
+    public void onClickedItem(long itemId) {
+        startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(itemId)));
     }
 }

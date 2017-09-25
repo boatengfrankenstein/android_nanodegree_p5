@@ -1,44 +1,43 @@
 package eu.bquepab.xyzreader.ui;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import eu.bquepab.xyzreader.R;
-import eu.bquepab.xyzreader.data.ItemsContract;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class ArticleViewHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.thumbnail)
     DynamicHeightNetworkImageView thumbnailView;
+    @BindView(R.id.article_title)
     TextView titleView;
+    @BindView(R.id.article_subtitle)
     TextView subtitleView;
 
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
     private long itemId;
+    private ArticleListAdapter.OnItemClickListener clickListener;
 
-    public ArticleViewHolder(View view) {
+    public ArticleViewHolder(View view, ArticleListAdapter.OnItemClickListener clickListener) {
         super(view);
-        thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
-        titleView = (TextView) view.findViewById(R.id.article_title);
-        subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.getContext()
-                 .startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(itemId)));
-            }
-        });
+        this.clickListener = clickListener;
+
+        ButterKnife.bind(this, view);
     }
 
     public void bind(String title, Date publishedDate, String author, String thumbUrl, float aspectRatio, long itemId) {
         this.itemId = itemId;
+
         titleView.setText(title);
 
         if (!publishedDate.before(START_OF_EPOCH.getTime())) {
@@ -54,5 +53,10 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
         thumbnailView.setImageUrl(thumbUrl, ImageLoaderHelper.getInstance(thumbnailView.getContext())
                                                              .getImageLoader());
         thumbnailView.setAspectRatio(aspectRatio);
+    }
+
+    @OnClick(R.id.article_card)
+    public void onClick() {
+        clickListener.onClickedItem(itemId);
     }
 }

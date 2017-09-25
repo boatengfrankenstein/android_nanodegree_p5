@@ -14,12 +14,17 @@ import timber.log.Timber;
 
 public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
 
+    public interface OnItemClickListener {
+        void onClickedItem(long itemId);
+    }
+
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
-
     private Cursor mCursor;
+    private OnItemClickListener clickListener;
 
-    public ArticleListAdapter(Cursor cursor) {
+    public ArticleListAdapter(Cursor cursor, OnItemClickListener clickListener) {
         mCursor = cursor;
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -32,7 +37,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                                   .inflate(R.layout.list_item_article, parent, false);
-        return new ArticleViewHolder(view);
+        return new ArticleViewHolder(view, clickListener);
     }
 
     private Date parsePublishedDate() {

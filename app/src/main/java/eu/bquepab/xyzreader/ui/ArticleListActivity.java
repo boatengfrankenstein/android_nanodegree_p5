@@ -26,7 +26,8 @@ import eu.bquepab.xyzreader.data.UpdaterService;
  * touched, lead to a {@link ArticleDetailActivity} representing item details. On tablets, the
  * activity presents a grid of items as cards.
  */
-public class ArticleListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, ArticleListAdapter.OnItemClickListener {
+public class ArticleListActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor>, ArticleListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = ArticleListActivity.class.toString();
 
@@ -44,15 +45,13 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
 
         ButterKnife.bind(this);
 
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
-            refresh();
+            onRefresh();
         }
-    }
-
-    private void refresh() {
-        startService(new Intent(this, UpdaterService.class));
     }
 
     @Override
@@ -108,5 +107,10 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
     @Override
     public void onClickedItem(long itemId) {
         startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(itemId)));
+    }
+
+    @Override
+    public void onRefresh() {
+        startService(new Intent(this, UpdaterService.class));
     }
 }

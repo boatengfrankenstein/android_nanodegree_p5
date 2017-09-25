@@ -15,6 +15,7 @@ ext {
             materialDimens : '1.4',
             butterknife    : '8.8.1',
             timber         : '4.5.1',
+            leakcanary     : '1.5.4',
     ]
 
     libraries = [
@@ -36,6 +37,8 @@ ext {
                     materialDimens: "com.dmitrymalkovich.android:material-design-dimens:${versions.materialDimens}",
                     butterknife   : "com.jakewharton:butterknife:${versions.butterknife}",
                     timber        : "com.jakewharton.timber:timber:${versions.timber}",
+                    leakCanary    : "com.squareup.leakcanary:leakcanary-android:${versions.leakcanary}",
+                    leakCanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakcanary}",
             ],
             apt  : [
                     butterknife: "com.jakewharton:butterknife-compiler:${versions.butterknife}",

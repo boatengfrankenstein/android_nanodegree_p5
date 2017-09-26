@@ -2,10 +2,10 @@
   android:id="@+id/article_card"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:layout_margin="@dimen/material_component_cards_space_between_cards"
   android:clickable="true"
   android:focusable="true"
-  android:foreground="?selectableItemBackground"
-  android:layout_margin="@dimen/material_component_cards_space_between_cards">
+  android:foreground="?selectableItemBackground">
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -16,8 +16,8 @@
       android:id="@+id/thumbnail"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:scaleType="fitStart"
-      android:adjustViewBounds="true" />
+      android:adjustViewBounds="true"
+      android:scaleType="fitStart" />
 
     <TextView
       android:id="@+id/article_title"
@@ -38,9 +38,9 @@
       android:layout_height="wrap_content"
       android:ellipsize="end"
       android:maxLines="2"
+      android:paddingBottom="@dimen/material_component_cards_top_and_bottom_padding"
       android:paddingLeft="@dimen/material_component_cards_left_and_right_padding"
       android:paddingRight="@dimen/material_component_cards_left_and_right_padding"
-      android:paddingBottom="@dimen/material_component_cards_top_and_bottom_padding"
       android:textColor="@color/material_light_black" />
   </LinearLayout>
 

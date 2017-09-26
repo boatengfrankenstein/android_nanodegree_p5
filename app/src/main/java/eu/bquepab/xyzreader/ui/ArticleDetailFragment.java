@@ -2,12 +2,16 @@ package eu.bquepab.xyzreader.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -15,10 +19,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import eu.bquepab.xyzreader.R;
 import eu.bquepab.xyzreader.data.ArticleLoader;
@@ -30,8 +36,7 @@ import java.util.GregorianCalendar;
  * either contained in a {@link ArticleListActivity} in two-pane mode (on
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
-public class ArticleDetailFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class ArticleDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ARG_ITEM_ID = "item_id";
 
@@ -45,12 +50,20 @@ public class ArticleDetailFragment extends Fragment implements
     FloatingActionButton shareFab;
     @BindView(R.id.detail_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.meta_bar)
+    LinearLayout metaBar;
+    @BindView(R.id.article_title)
+    TextView titleView;
+    @BindView(R.id.article_author)
+    TextView authorView;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
-    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
+    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -90,8 +103,7 @@ public class ArticleDetailFragment extends Fragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_article_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
 
@@ -116,12 +128,12 @@ public class ArticleDetailFragment extends Fragment implements
             return;
         }
 
-        String title = cursor.getString(ArticleLoader.Query.TITLE);
-        String author = Html.fromHtml(
+        final String title = cursor.getString(ArticleLoader.Query.TITLE);
+        final String author = Html.fromHtml(
                 DateUtils.getRelativeTimeSpanString(cursor.getLong(ArticleLoader.Query.PUBLISHED_DATE), System.currentTimeMillis(),
                                                     DateUtils.HOUR_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL)
-                         .toString() + " by <font color='#ffffff'>" + cursor.getString(ArticleLoader.Query.AUTHOR) + "</font>")
-                            .toString();
+                         .toString() + " by " + cursor.getString(ArticleLoader.Query.AUTHOR))
+                                  .toString();
         final String body = Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY))
                                 .toString();
 
@@ -129,9 +141,35 @@ public class ArticleDetailFragment extends Fragment implements
 
         Picasso.with(getContext())
                .load(photoUrl)
-               .into(photoView);
+               .noFade()
+               .into(photoView, new Callback() {
+                   @Override
+                   public void onSuccess() {
+                       Bitmap bitmap = ((BitmapDrawable) photoView.getDrawable()).getBitmap();
+                       Palette.from(bitmap)
+                              .generate(new Palette.PaletteAsyncListener() {
+                                  @Override
+                                  public void onGenerated(Palette palette) {
+                                      Palette.Swatch textSwatch = palette.getDominantSwatch();
+                                      if (null != textSwatch) {
+                                          metaBar.setBackgroundColor(textSwatch.getRgb());
+                                          titleView.setTextColor(textSwatch.getTitleTextColor());
+                                          authorView.setTextColor(textSwatch.getBodyTextColor());
+                                          collapsingToolbar.setExpandedTitleColor(textSwatch.getTitleTextColor());
+                                          collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
+                                      }
+                                      collapsingToolbar.setTitle(title);
+                                      titleView.setText(title);
+                                      authorView.setText(author);
+                                      bodyView.setText(body);
+                                  }
+                              });
+                   }
 
-        bodyView.setText(body);
+                   @Override
+                   public void onError() {
+                   }
+               });
 
         shareFab.setOnClickListener(new View.OnClickListener() {
             @Override

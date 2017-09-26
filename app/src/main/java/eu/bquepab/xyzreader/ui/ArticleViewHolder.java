@@ -1,13 +1,18 @@
 package eu.bquepab.xyzreader.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import eu.bquepab.xyzreader.R;
 import java.text.SimpleDateFormat;
@@ -16,7 +21,7 @@ import java.util.GregorianCalendar;
 
 public class ArticleViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.thumbnail)
-    DynamicHeightNetworkImageView thumbnailView;
+    ImageView thumbnailView;
     @BindView(R.id.article_title)
     TextView titleView;
     @BindView(R.id.article_subtitle)
@@ -53,8 +58,27 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
         Picasso.with(thumbnailView.getContext())
                .load(thumbUrl)
-               .into(thumbnailView);
-        thumbnailView.setAspectRatio(aspectRatio);
+               .into(thumbnailView, new Callback() {
+                   @Override
+                   public void onSuccess() {
+                       Bitmap bitmap = ((BitmapDrawable) thumbnailView.getDrawable()).getBitmap();
+                       Palette.from(bitmap)
+                              .generate(new Palette.PaletteAsyncListener() {
+                                  @Override
+                                  public void onGenerated(Palette palette) {
+                                      Palette.Swatch textSwatch = palette.getDominantSwatch();
+                                      itemView.setBackgroundColor(textSwatch.getRgb());
+                                      titleView.setTextColor(textSwatch.getTitleTextColor());
+                                      subtitleView.setTextColor(textSwatch.getBodyTextColor());
+                                  }
+                              });
+                   }
+
+                   @Override
+                   public void onError() {
+
+                   }
+               });
     }
 
     @OnClick(R.id.article_card)

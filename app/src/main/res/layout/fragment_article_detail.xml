@@ -31,7 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/material_layout_app_bar_height"
         app:layout_collapseMode="pin"
-        app:popupTheme="@style/AppTheme.Toolbar">
+        app:popupTheme="@style/AppTheme.Toolbar"
+        app:navigationIcon="?attr/homeAsUpIndicator">
 
       </android.support.v7.widget.Toolbar>
 

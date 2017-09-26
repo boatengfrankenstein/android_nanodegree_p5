@@ -94,6 +94,14 @@ public class ArticleDetailFragment extends Fragment implements
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_article_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
         return view;
     }
 
@@ -118,16 +126,6 @@ public class ArticleDetailFragment extends Fragment implements
                                 .toString();
 
         String photoUrl = cursor.getString(ArticleLoader.Query.PHOTO_URL);
-
-        toolbar.setTitle(title);
-        toolbar.setSubtitle(author);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
 
         Picasso.with(getContext())
                .load(photoUrl)

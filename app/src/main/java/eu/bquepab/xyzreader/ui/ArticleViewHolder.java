@@ -41,20 +41,8 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, view);
     }
 
-    public void bind(String title, Date publishedDate, String author, String thumbUrl, float aspectRatio, long itemId) {
+    public void bind(final String title, final Date publishedDate, final String author, String thumbUrl, long itemId) {
         this.itemId = itemId;
-
-        titleView.setText(title);
-
-        if (!publishedDate.before(START_OF_EPOCH.getTime())) {
-
-            subtitleView.setText(Html.fromHtml(
-                    DateUtils.getRelativeTimeSpanString(publishedDate.getTime(), System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                                                        DateUtils.FORMAT_ABBREV_ALL)
-                             .toString() + "<br/>" + " by " + author));
-        } else {
-            subtitleView.setText(Html.fromHtml(outputFormat.format(publishedDate) + "<br/>" + " by " + author));
-        }
 
         Picasso.with(thumbnailView.getContext())
                .load(thumbUrl)
@@ -67,18 +55,34 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
                                   @Override
                                   public void onGenerated(Palette palette) {
                                       Palette.Swatch textSwatch = palette.getDominantSwatch();
-                                      itemView.setBackgroundColor(textSwatch.getRgb());
-                                      titleView.setTextColor(textSwatch.getTitleTextColor());
-                                      subtitleView.setTextColor(textSwatch.getBodyTextColor());
+                                      if (null != textSwatch) {
+                                          itemView.setBackgroundColor(textSwatch.getRgb());
+                                          titleView.setTextColor(textSwatch.getTitleTextColor());
+                                          subtitleView.setTextColor(textSwatch.getBodyTextColor());
+                                      }
+                                      setText(title, publishedDate, author);
                                   }
                               });
                    }
 
                    @Override
                    public void onError() {
-
+                       setText(title, publishedDate, author);
                    }
                });
+    }
+
+    private void setText(String title, Date publishedDate, String author) {
+        titleView.setText(title);
+
+        if (!publishedDate.before(START_OF_EPOCH.getTime())) {
+            subtitleView.setText(Html.fromHtml(
+                    DateUtils.getRelativeTimeSpanString(publishedDate.getTime(), System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                                                        DateUtils.FORMAT_ABBREV_ALL)
+                             .toString() + "<br/>" + " by " + author));
+        } else {
+            subtitleView.setText(Html.fromHtml(outputFormat.format(publishedDate) + "<br/>" + " by " + author));
+        }
     }
 
     @OnClick(R.id.article_card)

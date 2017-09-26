@@ -58,10 +58,9 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         String author = cursor.getString(ArticleLoader.Query.AUTHOR);
         Date publishedDate = parsePublishedDate();
         String thumbUrl = cursor.getString(ArticleLoader.Query.THUMB_URL);
-        float aspectRatio = cursor.getFloat(ArticleLoader.Query.ASPECT_RATIO);
         long itemId = getItemId(position);
 
-        holder.bind(title, publishedDate, author, thumbUrl, aspectRatio, itemId);
+        holder.bind(title, publishedDate, author, thumbUrl, itemId);
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.squareup.picasso.Picasso;
 import eu.bquepab.xyzreader.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,8 +51,9 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
             subtitleView.setText(Html.fromHtml(outputFormat.format(publishedDate) + "<br/>" + " by " + author));
         }
 
-        thumbnailView.setImageUrl(thumbUrl, ImageLoaderHelper.getInstance(thumbnailView.getContext())
-                                                             .getImageLoader());
+        Picasso.with(thumbnailView.getContext())
+               .load(thumbUrl)
+               .into(thumbnailView);
         thumbnailView.setAspectRatio(aspectRatio);
     }
 

@@ -45,11 +45,10 @@ dependencies {
     compile libraries.app.materialDimens
     compile libraries.app.butterknife
     compile libraries.app.timber
+    compile libraries.app.picasso
 
     debugCompile libraries.app.leakCanary
     releaseCompile libraries.app.leakCanaryNoOp
-
-    compile files('libs/volley.jar')
 
     annotationProcessor libraries.apt.butterknife
 }

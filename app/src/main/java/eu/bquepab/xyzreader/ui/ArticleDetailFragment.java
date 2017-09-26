@@ -2,7 +2,6 @@ package eu.bquepab.xyzreader.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -20,8 +19,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
+import com.squareup.picasso.Picasso;
 import eu.bquepab.xyzreader.R;
 import eu.bquepab.xyzreader.data.ArticleLoader;
 import java.text.SimpleDateFormat;
@@ -119,6 +117,8 @@ public class ArticleDetailFragment extends Fragment implements
         final String body = Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY))
                                 .toString();
 
+        String photoUrl = cursor.getString(ArticleLoader.Query.PHOTO_URL);
+
         toolbar.setTitle(title);
         toolbar.setSubtitle(author);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -129,24 +129,11 @@ public class ArticleDetailFragment extends Fragment implements
             }
         });
 
+        Picasso.with(getContext())
+               .load(photoUrl)
+               .into(photoView);
+
         bodyView.setText(body);
-
-        ImageLoaderHelper.getInstance(getActivity())
-                         .getImageLoader()
-                         .get(cursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
-                             @Override
-                             public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-                                 Bitmap bitmap = imageContainer.getBitmap();
-                                 if (bitmap != null && photoView != null) {
-                                     photoView.setImageBitmap(imageContainer.getBitmap());
-                                 }
-                             }
-
-                             @Override
-                             public void onErrorResponse(VolleyError volleyError) {
-
-                             }
-                         });
 
         shareFab.setOnClickListener(new View.OnClickListener() {
             @Override

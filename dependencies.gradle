@@ -16,6 +16,7 @@ ext {
             butterknife    : '8.8.1',
             timber         : '4.5.1',
             leakcanary     : '1.5.4',
+            picasso        : '2.5.2',
     ]
 
     libraries = [
@@ -39,6 +40,7 @@ ext {
                     timber        : "com.jakewharton.timber:timber:${versions.timber}",
                     leakCanary    : "com.squareup.leakcanary:leakcanary-android:${versions.leakcanary}",
                     leakCanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakcanary}",
+                    picasso       : "com.squareup.picasso:picasso:${versions.picasso}",
             ],
             apt  : [
                     butterknife: "com.jakewharton:butterknife-compiler:${versions.butterknife}",

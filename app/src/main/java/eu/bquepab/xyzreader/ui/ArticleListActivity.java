@@ -33,13 +33,25 @@ public class ArticleListActivity extends AppCompatActivity
     private static final String TAG = ArticleListActivity.class.toString();
 
     @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    Toolbar toolbar;
     @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    RecyclerView recyclerView;
     @BindInt(R.integer.list_column_count)
     int numColumns;
+
+    private boolean isRefreshing = false;
+
+    private BroadcastReceiver refreshingReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (UpdaterService.BROADCAST_ACTION_STATE_CHANGE.equals(intent.getAction())) {
+                isRefreshing = intent.getBooleanExtra(UpdaterService.EXTRA_REFRESHING, false);
+                updateRefreshingUI();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +60,9 @@ public class ArticleListActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
 
         getSupportLoaderManager().initLoader(0, null, this);
 
@@ -62,29 +74,17 @@ public class ArticleListActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        registerReceiver(mRefreshingReceiver, new IntentFilter(UpdaterService.BROADCAST_ACTION_STATE_CHANGE));
+        registerReceiver(refreshingReceiver, new IntentFilter(UpdaterService.BROADCAST_ACTION_STATE_CHANGE));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(mRefreshingReceiver);
+        unregisterReceiver(refreshingReceiver);
     }
 
-    private boolean mIsRefreshing = false;
-
-    private BroadcastReceiver mRefreshingReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (UpdaterService.BROADCAST_ACTION_STATE_CHANGE.equals(intent.getAction())) {
-                mIsRefreshing = intent.getBooleanExtra(UpdaterService.EXTRA_REFRESHING, false);
-                updateRefreshingUI();
-            }
-        }
-    };
-
     private void updateRefreshingUI() {
-        mSwipeRefreshLayout.setRefreshing(mIsRefreshing);
+        swipeRefreshLayout.setRefreshing(isRefreshing);
     }
 
     @Override
@@ -96,14 +96,14 @@ public class ArticleListActivity extends AppCompatActivity
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         ArticleListAdapter adapter = new ArticleListAdapter(cursor, this);
         adapter.setHasStableIds(true);
-        mRecyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
         StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(numColumns, StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(sglm);
+        recyclerView.setLayoutManager(sglm);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mRecyclerView.setAdapter(null);
+        recyclerView.setAdapter(null);
     }
 
     @Override

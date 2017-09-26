@@ -25,12 +25,12 @@ import eu.bquepab.xyzreader.data.ItemsContract;
 public class ArticleDetailActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private Cursor mCursor;
-    private long mStartId;
+    private Cursor cursor;
+    private long startId;
 
     @BindView(R.id.pager)
-    ViewPager mPager;
-    private MyPagerAdapter mPagerAdapter;
+    ViewPager pager;
+    private CustomPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +46,17 @@ public class ArticleDetailActivity extends AppCompatActivity
 
         getSupportLoaderManager().initLoader(0, null, this);
 
-        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
 
-        mPager.setAdapter(mPagerAdapter);
-        mPager.setPageMargin((int) TypedValue
+        pager.setAdapter(pagerAdapter);
+        pager.setPageMargin((int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
-        mPager.setPageMarginDrawable(new ColorDrawable(0x22000000));
+        pager.setPageMarginDrawable(new ColorDrawable(0x22000000));
 
 
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
-                mStartId = ItemsContract.Items.getItemId(getIntent().getData());
+                startId = ItemsContract.Items.getItemId(getIntent().getData());
             }
         }
     }
@@ -68,47 +68,45 @@ public class ArticleDetailActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        mCursor = cursor;
-        mPagerAdapter.notifyDataSetChanged();
+        this.cursor = cursor;
+        pagerAdapter.notifyDataSetChanged();
 
         // Select the start ID
-        if (mStartId > 0) {
-            mCursor.moveToFirst();
+        if (startId > 0) {
+            this.cursor.moveToFirst();
             // TODO: optimize
-            while (!mCursor.isAfterLast()) {
-                if (mCursor.getLong(ArticleLoader.Query._ID) == mStartId) {
-                    final int position = mCursor.getPosition();
-                    mPager.setCurrentItem(position, false);
+            while (!this.cursor.isAfterLast()) {
+                if (this.cursor.getLong(ArticleLoader.Query._ID) == startId) {
+                    final int position = this.cursor.getPosition();
+                    pager.setCurrentItem(position, false);
                     break;
                 }
-                mCursor.moveToNext();
+                this.cursor.moveToNext();
             }
-            mStartId = 0;
+            startId = 0;
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-        mCursor = null;
-        mPagerAdapter.notifyDataSetChanged();
+        cursor = null;
+        pagerAdapter.notifyDataSetChanged();
     }
 
-
-
-    private class MyPagerAdapter extends FragmentStatePagerAdapter {
-        public MyPagerAdapter(FragmentManager fm) {
+    private class CustomPagerAdapter extends FragmentStatePagerAdapter {
+        public CustomPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            mCursor.moveToPosition(position);
-            return ArticleDetailFragment.newInstance(mCursor.getLong(ArticleLoader.Query._ID));
+            cursor.moveToPosition(position);
+            return ArticleDetailFragment.newInstance(cursor.getLong(ArticleLoader.Query._ID));
         }
 
         @Override
         public int getCount() {
-            return (mCursor != null) ? mCursor.getCount() : 0;
+            return (cursor != null) ? cursor.getCount() : 0;
         }
     }
 }

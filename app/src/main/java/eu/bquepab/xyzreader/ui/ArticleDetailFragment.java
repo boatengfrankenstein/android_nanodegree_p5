@@ -38,15 +38,15 @@ public class ArticleDetailFragment extends Fragment implements
     public static final String ARG_ITEM_ID = "item_id";
 
     private Unbinder unbinder;
-    private long mItemId;
+    private long itemId;
     @BindView(R.id.photo)
-    ImageView mPhotoView;
+    ImageView photoView;
     @BindView(R.id.article_body)
-    TextView mBodyView;
+    TextView bodyView;
     @BindView(R.id.share_fab)
-    FloatingActionButton mShareFab;
+    FloatingActionButton shareFab;
     @BindView(R.id.detail_toolbar)
-    Toolbar mToolbar;
+    Toolbar toolbar;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
@@ -74,7 +74,7 @@ public class ArticleDetailFragment extends Fragment implements
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItemId = getArguments().getLong(ARG_ITEM_ID);
+            itemId = getArguments().getLong(ARG_ITEM_ID);
         }
 
         setHasOptionsMenu(true);
@@ -101,7 +101,7 @@ public class ArticleDetailFragment extends Fragment implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return ArticleLoader.newInstanceForItemId(getActivity(), mItemId);
+        return ArticleLoader.newInstanceForItemId(getActivity(), itemId);
     }
 
     @Override
@@ -119,17 +119,17 @@ public class ArticleDetailFragment extends Fragment implements
         final String body = Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY))
                                 .toString();
 
-        mToolbar.setTitle(title);
-        mToolbar.setSubtitle(author);
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setTitle(title);
+        toolbar.setSubtitle(author);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
 
-        mBodyView.setText(body);
+        bodyView.setText(body);
 
         ImageLoaderHelper.getInstance(getActivity())
                          .getImageLoader()
@@ -137,8 +137,8 @@ public class ArticleDetailFragment extends Fragment implements
                              @Override
                              public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                                  Bitmap bitmap = imageContainer.getBitmap();
-                                 if (bitmap != null && mPhotoView != null) {
-                                     mPhotoView.setImageBitmap(imageContainer.getBitmap());
+                                 if (bitmap != null && photoView != null) {
+                                     photoView.setImageBitmap(imageContainer.getBitmap());
                                  }
                              }
 
@@ -148,7 +148,7 @@ public class ArticleDetailFragment extends Fragment implements
                              }
                          });
 
-        mShareFab.setOnClickListener(new View.OnClickListener() {
+        shareFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())

@@ -36,25 +36,25 @@ import java.util.HashMap;
  * thread safe.
  */
 public class SelectionBuilder {
-    private String mTable = null;
-    private HashMap<String, String> mProjectionMap;
-    private StringBuilder mSelection;
-    private ArrayList<String> mSelectionArgs;
+    private String table = null;
+    private HashMap<String, String> projectionMap;
+    private StringBuilder selection;
+    private ArrayList<String> selectionArgs;
 
     /**
      * Reset any internal state, allowing this builder to be recycled.
      */
     public SelectionBuilder reset() {
-        mTable = null;
-		if (mProjectionMap != null) {
-			mProjectionMap.clear();
-		}
-		if (mSelection != null) {
-			mSelection.setLength(0);
-		}
-		if (mSelectionArgs != null) {
-			mSelectionArgs.clear();
-		}
+        table = null;
+        if (projectionMap != null) {
+            projectionMap.clear();
+        }
+        if (selection != null) {
+            selection.setLength(0);
+        }
+        if (selectionArgs != null) {
+            selectionArgs.clear();
+        }
         return this;
     }
 
@@ -74,15 +74,17 @@ public class SelectionBuilder {
         }
 
         ensureSelection(selection.length());
-        if (mSelection.length() > 0) {
-            mSelection.append(" AND ");
+        if (this.selection.length() > 0) {
+            this.selection.append(" AND ");
         }
 
-        mSelection.append("(").append(selection).append(")");
+        this.selection.append("(")
+                      .append(selection)
+                      .append(")");
         if (selectionArgs != null) {
         	ensureSelectionArgs();
             for (String arg : selectionArgs) {
-                mSelectionArgs.add(arg);
+                this.selectionArgs.add(arg);
             }
         }
 
@@ -90,43 +92,43 @@ public class SelectionBuilder {
     }
 
     public SelectionBuilder table(String table) {
-        mTable = table;
+        this.table = table;
         return this;
     }
 
     private void assertTable() {
-        if (mTable == null) {
+        if (table == null) {
             throw new IllegalStateException("Table not specified");
         }
     }
 
     private void ensureProjectionMap() {
-		if (mProjectionMap == null) {
-			mProjectionMap = new HashMap<String, String>();
-		}
+        if (projectionMap == null) {
+            projectionMap = new HashMap<String, String>();
+        }
     }
 
     private void ensureSelection(int lengthHint) {
-    	if (mSelection == null) {
-    		mSelection = new StringBuilder(lengthHint + 8);
-    	}
+        if (selection == null) {
+            selection = new StringBuilder(lengthHint + 8);
+        }
     }
 
     private void ensureSelectionArgs() {
-    	if (mSelectionArgs == null) {
-    		mSelectionArgs = new ArrayList<String>();
-    	}
+        if (selectionArgs == null) {
+            selectionArgs = new ArrayList<String>();
+        }
     }
 
     public SelectionBuilder mapToTable(String column, String table) {
     	ensureProjectionMap();
-        mProjectionMap.put(column, table + "." + column);
+        projectionMap.put(column, table + "." + column);
         return this;
     }
 
     public SelectionBuilder map(String fromColumn, String toClause) {
     	ensureProjectionMap();
-        mProjectionMap.put(fromColumn, toClause + " AS " + fromColumn);
+        projectionMap.put(fromColumn, toClause + " AS " + fromColumn);
         return this;
     }
 
@@ -136,10 +138,10 @@ public class SelectionBuilder {
      * @see #getSelectionArgs()
      */
     public String getSelection() {
-    	if (mSelection != null) {
-            return mSelection.toString();
-    	} else {
-    		return null;
+        if (selection != null) {
+            return selection.toString();
+        } else {
+            return null;
     	}
     }
 
@@ -149,17 +151,19 @@ public class SelectionBuilder {
      * @see #getSelection()
      */
     public String[] getSelectionArgs() {
-    	if (mSelectionArgs != null) {
-            return mSelectionArgs.toArray(new String[mSelectionArgs.size()]);
-    	} else {
-    		return null;
+        if (selectionArgs != null) {
+            return selectionArgs.toArray(new String[selectionArgs.size()]);
+        } else {
+            return null;
     	}
     }
 
     private void mapColumns(String[] columns) {
-    	if (mProjectionMap == null) return;
+        if (projectionMap == null) {
+            return;
+        }
         for (int i = 0; i < columns.length; i++) {
-            final String target = mProjectionMap.get(columns[i]);
+            final String target = projectionMap.get(columns[i]);
             if (target != null) {
                 columns[i] = target;
             }
@@ -168,8 +172,7 @@ public class SelectionBuilder {
 
     @Override
     public String toString() {
-        return "SelectionBuilder[table=" + mTable + ", selection=" + getSelection()
-                + ", selectionArgs=" + Arrays.toString(getSelectionArgs()) + "]";
+        return "SelectionBuilder[table=" + table + ", selection=" + getSelection() + ", selectionArgs=" + Arrays.toString(getSelectionArgs()) + "]";
     }
 
     /**
@@ -186,8 +189,7 @@ public class SelectionBuilder {
             String having, String orderBy, String limit) {
         assertTable();
         if (columns != null) mapColumns(columns);
-        return db.query(mTable, columns, getSelection(), getSelectionArgs(), groupBy, having,
-                orderBy, limit);
+        return db.query(table, columns, getSelection(), getSelectionArgs(), groupBy, having, orderBy, limit);
     }
 
     /**
@@ -195,7 +197,7 @@ public class SelectionBuilder {
      */
     public int update(SQLiteDatabase db, ContentValues values) {
         assertTable();
-        return db.update(mTable, values, getSelection(), getSelectionArgs());
+        return db.update(table, values, getSelection(), getSelectionArgs());
     }
 
     /**
@@ -203,6 +205,6 @@ public class SelectionBuilder {
      */
     public int delete(SQLiteDatabase db) {
         assertTable();
-        return db.delete(mTable, getSelection(), getSelectionArgs());
+        return db.delete(table, getSelection(), getSelectionArgs());
     }
 }

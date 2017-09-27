@@ -60,8 +60,6 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     CollapsingToolbarLayout collapsingToolbar;
     @BindView(R.id.meta_bar)
     LinearLayout metaBar;
-    @BindView(R.id.article_title)
-    TextView titleView;
     @BindView(R.id.article_author)
     TextView authorView;
 
@@ -162,13 +160,11 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                                       Palette.Swatch textSwatch = palette.getDominantSwatch();
                                       if (null != textSwatch) {
                                           metaBar.setBackgroundColor(textSwatch.getRgb());
-                                          titleView.setTextColor(textSwatch.getTitleTextColor());
                                           authorView.setTextColor(textSwatch.getBodyTextColor());
                                           collapsingToolbar.setExpandedTitleColor(textSwatch.getTitleTextColor());
                                           collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
                                       }
                                       collapsingToolbar.setTitle(title);
-                                      titleView.setText(title);
                                       authorView.setText(author);
                                   }
                               });

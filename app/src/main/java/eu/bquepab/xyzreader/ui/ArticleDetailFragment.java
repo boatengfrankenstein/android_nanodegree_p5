@@ -141,7 +141,7 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
         final String body = Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY))
                                 .toString();
 
-        String photoUrl = cursor.getString(ArticleLoader.Query.PHOTO_URL);
+        final String photoUrl = cursor.getString(ArticleLoader.Query.PHOTO_URL);
 
         ArticleBodyListAdapter bodyAdapter = new ArticleBodyListAdapter(getContext(), body);
         bodyView.setAdapter(bodyAdapter);

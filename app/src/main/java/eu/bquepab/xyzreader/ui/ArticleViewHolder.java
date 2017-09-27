@@ -1,7 +1,7 @@
 package eu.bquepab.xyzreader.ui;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import eu.bquepab.xyzreader.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,15 +41,14 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, view);
     }
 
-    public void bind(final String title, final Date publishedDate, final String author, String thumbUrl, long itemId) {
+    public void bind(final String title, final Date publishedDate, final String author, final String thumbUrl, long itemId) {
         this.itemId = itemId;
 
         Picasso.with(thumbnailView.getContext())
                .load(thumbUrl)
-               .into(thumbnailView, new Callback() {
+               .into(new Target() {
                    @Override
-                   public void onSuccess() {
-                       Bitmap bitmap = ((BitmapDrawable) thumbnailView.getDrawable()).getBitmap();
+                   public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                        Palette.from(bitmap)
                               .generate(new Palette.PaletteAsyncListener() {
                                   @Override
@@ -63,13 +62,20 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
                                       setText(title, publishedDate, author);
                                   }
                               });
+                       thumbnailView.setImageBitmap(bitmap);
                    }
 
                    @Override
-                   public void onError() {
-                       setText(title, publishedDate, author);
+                   public void onBitmapFailed(Drawable errorDrawable) {
+
+                   }
+
+                   @Override
+                   public void onPrepareLoad(Drawable placeHolderDrawable) {
+
                    }
                });
+
     }
 
     private void setText(String title, Date publishedDate, String author) {

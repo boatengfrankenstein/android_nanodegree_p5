@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -30,8 +30,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import eu.bquepab.xyzreader.R;
 import eu.bquepab.xyzreader.data.ArticleLoader;
 import java.text.SimpleDateFormat;
@@ -141,18 +141,17 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
         final String body = Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY))
                                 .toString();
 
+        String photoUrl = cursor.getString(ArticleLoader.Query.PHOTO_URL);
+
         ArticleBodyListAdapter bodyAdapter = new ArticleBodyListAdapter(getContext(), body);
         bodyView.setAdapter(bodyAdapter);
         bodyView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        String photoUrl = cursor.getString(ArticleLoader.Query.PHOTO_URL);
-
         Picasso.with(getContext())
                .load(photoUrl)
-               .into(photoView, new Callback() {
+               .into(new Target() {
                    @Override
-                   public void onSuccess() {
-                       Bitmap bitmap = ((BitmapDrawable) photoView.getDrawable()).getBitmap();
+                   public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                        Palette.from(bitmap)
                               .generate(new Palette.PaletteAsyncListener() {
                                   @Override
@@ -166,12 +165,20 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                                       }
                                       collapsingToolbar.setTitle(title);
                                       authorView.setText(author);
+
+                                      photoView.setImageBitmap(bitmap);
                                   }
                               });
                    }
 
                    @Override
-                   public void onError() {
+                   public void onBitmapFailed(Drawable errorDrawable) {
+
+                   }
+
+                   @Override
+                   public void onPrepareLoad(Drawable placeHolderDrawable) {
+
                    }
                });
 

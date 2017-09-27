@@ -44,7 +44,7 @@ public class ArticleListActivity extends AppCompatActivity
 
     private boolean isRefreshing = false;
 
-    private BroadcastReceiver refreshingReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver refreshingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (UpdaterService.BROADCAST_ACTION_STATE_CHANGE.equals(intent.getAction())) {

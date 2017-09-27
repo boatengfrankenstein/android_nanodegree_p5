@@ -199,7 +199,7 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     private class ArticleBodyListAdapter extends RecyclerView.Adapter<ArticleBodyViewHolder> {
 
         StaticLayout sl;
-        TextView textView;
+        final TextView textView;
         final String text;
         int itemCount;
         private static final int maxLines = 20;

@@ -31,7 +31,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
     private long itemId;
-    private ArticleListAdapter.OnItemClickListener clickListener;
+    private final ArticleListAdapter.OnItemClickListener clickListener;
 
     public ArticleViewHolder(View view, ArticleListAdapter.OnItemClickListener clickListener) {
         super(view);

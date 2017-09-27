@@ -19,8 +19,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
     }
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
-    private Cursor cursor;
-    private OnItemClickListener clickListener;
+    private final Cursor cursor;
+    private final OnItemClickListener clickListener;
 
     public ArticleListAdapter(Cursor cursor, OnItemClickListener clickListener) {
         this.cursor = cursor;

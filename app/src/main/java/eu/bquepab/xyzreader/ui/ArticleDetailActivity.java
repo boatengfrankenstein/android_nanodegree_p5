@@ -53,7 +53,6 @@ public class ArticleDetailActivity extends AppCompatActivity
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
         pager.setPageMarginDrawable(new ColorDrawable(0x22000000));
 
-
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
                 startId = ItemsContract.Items.getItemId(getIntent().getData());

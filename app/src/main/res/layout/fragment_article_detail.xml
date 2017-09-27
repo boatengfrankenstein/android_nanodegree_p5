@@ -76,20 +76,12 @@
 
   </android.support.design.widget.AppBarLayout>
 
-  <android.support.v4.widget.NestedScrollView
-    android:id="@+id/article_detail_container"
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/article_body"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <TextView
-      android:id="@+id/article_body"
-      style="?android:attr/textAppearanceMedium"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="@dimen/material_layout_keylines_screen_edge_margin" />
-
-  </android.support.v4.widget.NestedScrollView>
+    android:padding="@dimen/material_layout_keylines_screen_edge_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
   <android.support.design.widget.FloatingActionButton
     android:id="@+id/share_fab"

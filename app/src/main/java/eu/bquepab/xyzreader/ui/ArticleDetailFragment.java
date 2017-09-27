@@ -1,10 +1,12 @@
 package eu.bquepab.xyzreader.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,8 +14,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.Layout;
+import android.text.StaticLayout;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +51,7 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     @BindView(R.id.photo)
     ImageView photoView;
     @BindView(R.id.article_body)
-    TextView bodyView;
+    RecyclerView bodyView;
     @BindView(R.id.share_fab)
     FloatingActionButton shareFab;
     @BindView(R.id.detail_toolbar)
@@ -137,11 +143,14 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
         final String body = Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY))
                                 .toString();
 
+        ArticleBodyListAdapter bodyAdapter = new ArticleBodyListAdapter(getContext(), body);
+        bodyView.setAdapter(bodyAdapter);
+        bodyView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         String photoUrl = cursor.getString(ArticleLoader.Query.PHOTO_URL);
 
         Picasso.with(getContext())
                .load(photoUrl)
-               .noFade()
                .into(photoView, new Callback() {
                    @Override
                    public void onSuccess() {
@@ -161,7 +170,6 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                                       collapsingToolbar.setTitle(title);
                                       titleView.setText(title);
                                       authorView.setText(author);
-                                      bodyView.setText(body);
                                   }
                               });
                    }
@@ -190,5 +198,74 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private class ArticleBodyListAdapter extends RecyclerView.Adapter<ArticleBodyViewHolder> {
+
+        StaticLayout sl;
+        TextView textView;
+        final String text;
+        int itemCount;
+        private static final int maxLines = 20;
+
+        public ArticleBodyListAdapter(Context context, String text) {
+            this.text = text;
+            textView = new TextView(context);
+            textView.setText(text);
+
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    sl = new StaticLayout(ArticleBodyListAdapter.this.text, textView.getPaint(), ArticleDetailFragment.this.bodyView.getWidth(),
+                                          Layout.Alignment.ALIGN_NORMAL, 1, 0, true);
+
+                    int lineCount = sl.getLineCount();
+                    itemCount = lineCount / maxLines;
+                    if (lineCount % maxLines > 0) {
+                        itemCount++;
+                    }
+                    notifyDataSetChanged();
+                }
+            });
+        }
+
+        @Override
+        public ArticleBodyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                                      .inflate(R.layout.list_item_article_body, parent, false);
+            return new ArticleBodyViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ArticleBodyViewHolder holder, int position) {
+            int startChar = sl.getLineStart(position * maxLines);
+            int endChar;
+            if ((position + 1) * maxLines >= sl.getLineCount()) {
+                endChar = text.length();
+            } else {
+                endChar = sl.getLineStart((position + 1) * maxLines);
+            }
+            holder.bind(text.substring(startChar, endChar));
+        }
+
+        @Override
+        public int getItemCount() {
+            return itemCount;
+        }
+    }
+
+    class ArticleBodyViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.article_body)
+        TextView bodyView;
+
+        public ArticleBodyViewHolder(View view) {
+            super(view);
+
+            ButterKnife.bind(this, view);
+        }
+
+        public void bind(String body) {
+            bodyView.setText(body);
+        }
     }
 }

@@ -3,6 +3,7 @@ package eu.bquepab.xyzreader.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import timber.log.Timber;
 
 public class DateUtils {
@@ -20,5 +21,23 @@ public class DateUtils {
             Timber.i("passing today's date");
             return new Date();
         }
+    }
+
+    public static String createRelativeTimeSpanString(Date date) {
+        SimpleDateFormat outputFormat = new SimpleDateFormat();
+        GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
+
+        String relativeTimeSpan;
+
+        if (!date.before(START_OF_EPOCH.getTime())) {
+            relativeTimeSpan = android.text.format.DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(),
+                                                                                       android.text.format.DateUtils.HOUR_IN_MILLIS,
+                                                                                       android.text.format.DateUtils.FORMAT_ABBREV_ALL)
+                                                            .toString();
+        } else {
+            relativeTimeSpan = outputFormat.format(date);
+        }
+
+        return relativeTimeSpan;
     }
 }

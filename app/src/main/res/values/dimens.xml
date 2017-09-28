@@ -1,0 +1,9 @@
+<resources>
+    <dimen name="fab_elevation">4dp</dimen>
+    <dimen name="fab_press_translation_z">10dp</dimen>
+    <dimen name="toolbar_layout_height">320dp</dimen>
+    <dimen name="toolbar_layout_margin_bottom">40dp</dimen>
+    <dimen name="meta_bar_height">80dp</dimen>
+    <dimen name="article_body_scrollview_width">500dp</dimen>
+    <dimen name="article_body_scrollview_overlap_top">100dp</dimen>
+</resources>

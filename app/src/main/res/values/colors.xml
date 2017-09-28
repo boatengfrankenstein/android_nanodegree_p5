@@ -1,0 +1,8 @@
+<resources>
+  <color name="primaryColor">#8e24aa</color>
+  <color name="primaryDarkColor">#5c007a</color>
+  <color name="secondaryColor">#ff8a65</color>
+  <color name="primaryTextColor">#ffffff</color>
+  <color name="secondaryTextColor">#000000</color>
+  <color name="transparent">#00000000</color>
+</resources>

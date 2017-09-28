@@ -23,7 +23,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Layout;
 import android.text.StaticLayout;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +36,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import eu.bquepab.xyzreader.R;
 import eu.bquepab.xyzreader.data.ArticleLoader;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
+import eu.bquepab.xyzreader.utils.DateUtils;
 
 /**
  * A fragment representing a single Article detail screen. This fragment is
@@ -70,12 +68,6 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     TextView titleView;
     @BindView(R.id.app_bar)
     AppBarLayout appBar;
-
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
-    // Use default locale format
-    private SimpleDateFormat outputFormat = new SimpleDateFormat();
-    // Most time functions can only handle 1902 - 2037
-    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -146,9 +138,9 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
 
         final String title = cursor.getString(ArticleLoader.Query.TITLE);
         final String author = Html.fromHtml(
-                DateUtils.getRelativeTimeSpanString(cursor.getLong(ArticleLoader.Query.PUBLISHED_DATE), System.currentTimeMillis(),
-                                                    DateUtils.HOUR_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL)
-                         .toString() + " by " + cursor.getString(ArticleLoader.Query.AUTHOR))
+
+                DateUtils.createRelativeTimeSpanString(DateUtils.parsePublishedDate(cursor.getString(ArticleLoader.Query.PUBLISHED_DATE))) + " by "
+                + cursor.getString(ArticleLoader.Query.AUTHOR))
                                   .toString();
         final String body = Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY))
                                 .toString();

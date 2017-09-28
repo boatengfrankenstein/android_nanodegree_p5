@@ -7,12 +7,15 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,6 +65,11 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     LinearLayout metaBar;
     @BindView(R.id.article_author)
     TextView authorView;
+    @Nullable
+    @BindView(R.id.article_title)
+    TextView titleView;
+    @BindView(R.id.app_bar)
+    AppBarLayout appBar;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
@@ -110,6 +118,10 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_article_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        if (null != titleView) {
+            ViewCompat.setNestedScrollingEnabled(bodyView, false);
+        }
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,10 +172,38 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                                       if (null != textSwatch) {
                                           metaBar.setBackgroundColor(textSwatch.getRgb());
                                           authorView.setTextColor(textSwatch.getBodyTextColor());
-                                          collapsingToolbar.setExpandedTitleColor(textSwatch.getTitleTextColor());
+                                          if (null == titleView) {
+                                              collapsingToolbar.setExpandedTitleColor(textSwatch.getTitleTextColor());
+                                              collapsingToolbar.setStatusBarScrimColor(palette.getDarkMutedColor(0xFFF));
+                                          } else {
+                                              titleView.setTextColor(textSwatch.getTitleTextColor());
+                                          }
+                                          collapsingToolbar.setCollapsedTitleTextColor(textSwatch.getTitleTextColor());
                                           collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
                                       }
-                                      collapsingToolbar.setTitle(title);
+                                      if (null == titleView) {
+                                          collapsingToolbar.setTitle(title);
+                                      } else {
+                                          titleView.setText(title);
+                                          appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                                              boolean showing = true;
+                                              int scrollRange = -1;
+
+                                              @Override
+                                              public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                                                  if (-1 == scrollRange) {
+                                                      scrollRange = appBarLayout.getTotalScrollRange();
+                                                  }
+                                                  if ((scrollRange + verticalOffset) <= toolbar.getHeight()) {
+                                                      collapsingToolbar.setTitle(title);
+                                                      showing = true;
+                                                  } else if (showing) {
+                                                      collapsingToolbar.setTitle(null);
+                                                      showing = false;
+                                                  }
+                                              }
+                                          });
+                                      }
                                       authorView.setText(author);
 
                                       photoView.setImageBitmap(bitmap);
@@ -182,7 +222,9 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                    }
                });
 
-        shareFab.setOnClickListener(new View.OnClickListener() {
+        shareFab.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View v) {
                 startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())

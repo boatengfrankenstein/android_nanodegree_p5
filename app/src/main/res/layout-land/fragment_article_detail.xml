@@ -7,17 +7,15 @@
   <android.support.design.widget.AppBarLayout
     android:id="@+id/app_bar"
     android:layout_width="match_parent"
-    android:layout_height="320dp"
+    android:layout_height="wrap_content"
     android:theme="@style/AppTheme.ActionBar">
 
     <android.support.design.widget.CollapsingToolbarLayout
       android:id="@+id/toolbar_layout"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="200dp"
       app:contentScrim="?attr/colorPrimary"
-      app:expandedTitleMargin="16dp"
-      app:expandedTitleMarginBottom="40dp"
-      app:layout_scrollFlags="scroll|exitUntilCollapsed"
+      app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
       app:toolbarId="@+id/detail_toolbar">
 
       <ImageView
@@ -27,6 +25,12 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/article_detail_photo"
         android:scaleType="centerCrop" />
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/photo_background_protection" />
+
 
       <android.support.v7.widget.Toolbar
         android:id="@+id/detail_toolbar"
@@ -43,9 +47,9 @@
   <android.support.v4.widget.NestedScrollView
     android:layout_width="500dp"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginTop="-200dp"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_gravity="fill_vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    app:behavior_overlapTop="100dp">
 
     <android.support.v7.widget.CardView
       android:layout_width="match_parent"
@@ -56,31 +60,38 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-      <LinearLayout
-        android:id="@+id/meta_bar"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/material_layout_keylines_screen_edge_margin"
-        android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
-        android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
-        android:paddingTop="@dimen/material_layout_keylines_screen_edge_margin">
+        <LinearLayout
+          android:id="@+id/meta_bar"
+          android:layout_width="match_parent"
+          android:layout_height="80dp"
+          android:orientation="vertical"
+          android:padding="@dimen/material_layout_keylines_screen_edge_margin">
 
-        <TextView
-          android:id="@+id/article_author"
-          style="?android:attr/textAppearanceSmall"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="@color/material_light_white"
-          tools:text="The Author" />
+          <TextView
+            android:id="@+id/article_title"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textColor="@color/material_light_white"
+            android:textStyle="bold" />
 
-      </LinearLayout>
+          <TextView
+            android:id="@+id/article_author"
+            style="?android:attr/textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/material_light_white"
+            tools:text="The Author" />
 
-      <android.support.v7.widget.RecyclerView
-        android:id="@+id/article_body"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/material_layout_keylines_screen_edge_margin" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+          android:id="@+id/article_body"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:clipToPadding="false"
+          android:padding="@dimen/material_layout_keylines_screen_edge_margin" />
 
       </LinearLayout>
 
@@ -100,6 +111,7 @@
     app:elevation="@dimen/fab_elevation"
     app:layout_anchor="@id/app_bar"
     app:layout_anchorGravity="bottom|end|right"
-    app:pressedTranslationZ="@dimen/fab_press_translation_z" />
+    app:pressedTranslationZ="@dimen/fab_press_translation_z"
+    android:tint="@color/material_light_white" />
 
 </android.support.design.widget.CoordinatorLayout>

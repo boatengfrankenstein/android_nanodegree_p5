@@ -29,8 +29,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -68,6 +70,10 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     TextView titleView;
     @BindView(R.id.app_bar)
     AppBarLayout appBar;
+    @BindString(R.string.action_share)
+    String shareAction;
+
+    private String bodyText;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -144,6 +150,7 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                                   .toString();
         final String body = Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY))
                                 .toString();
+        this.bodyText = body;
 
         final String photoUrl = cursor.getString(ArticleLoader.Query.PHOTO_URL);
 
@@ -213,18 +220,6 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
 
                    }
                });
-
-        shareFab.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v) {
-                startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
-                                                                            .setType("text/plain")
-                                                                            .setText(body)
-                                                                            .getIntent(), getString(R.string.action_share)));
-            }
-        });
     }
 
     @Override
@@ -235,6 +230,14 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.share_fab)
+    public void onFabClicked() {
+        startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
+                                                                    .setType("text/plain")
+                                                                    .setText(bodyText)
+                                                                    .getIntent(), shareAction));
     }
 
     private class ArticleBodyListAdapter extends RecyclerView.Adapter<ArticleBodyViewHolder> {

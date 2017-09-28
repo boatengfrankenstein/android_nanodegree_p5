@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemsProvider extends ContentProvider {
-	private SQLiteOpenHelper mOpenHelper;
+	private SQLiteOpenHelper openHelper;
 
 	interface Tables {
 		String ITEMS = "items";
@@ -35,7 +35,7 @@ public class ItemsProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-        mOpenHelper = new ItemsDatabase(getContext());
+		openHelper = new ItemsDatabase(getContext());
 		return true;
 	}
 
@@ -54,7 +54,7 @@ public class ItemsProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+		final SQLiteDatabase db = openHelper.getReadableDatabase();
 		final SelectionBuilder builder = buildSelection(uri);
 		Cursor cursor = builder.where(selection, selectionArgs).query(db, projection, sortOrder);
         if (cursor != null) {
@@ -65,7 +65,7 @@ public class ItemsProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+		final SQLiteDatabase db = openHelper.getWritableDatabase();
 		final int match = sUriMatcher.match(uri);
 		switch (match) {
 			case ITEMS: {
@@ -81,7 +81,7 @@ public class ItemsProvider extends ContentProvider {
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+		final SQLiteDatabase db = openHelper.getWritableDatabase();
 		final SelectionBuilder builder = buildSelection(uri);
         getContext().getContentResolver().notifyChange(uri, null);
 		return builder.where(selection, selectionArgs).update(db, values);
@@ -89,7 +89,7 @@ public class ItemsProvider extends ContentProvider {
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+		final SQLiteDatabase db = openHelper.getWritableDatabase();
 		final SelectionBuilder builder = buildSelection(uri);
         getContext().getContentResolver().notifyChange(uri, null);
 		return builder.where(selection, selectionArgs).delete(db);
@@ -124,9 +124,9 @@ public class ItemsProvider extends ContentProvider {
      */
     public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
             throws OperationApplicationException {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        db.beginTransaction();
-        try {
+		final SQLiteDatabase db = openHelper.getWritableDatabase();
+		db.beginTransaction();
+		try {
             final int numOperations = operations.size();
             final ContentProviderResult[] results = new ContentProviderResult[numOperations];
             for (int i = 0; i < numOperations; i++) {

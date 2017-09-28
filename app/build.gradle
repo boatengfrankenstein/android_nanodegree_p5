@@ -37,11 +37,20 @@ dependencies {
     compile libraries.app.supportV4
     compile libraries.app.supportV13
     compile libraries.app.appCompat
+    compile libraries.app.design
     compile libraries.app.palette
     compile libraries.app.recyclerview
     compile libraries.app.cardview
     compile libraries.app.okhttp
-    compile files('libs/volley.jar')
+    compile libraries.app.materialDimens
+    compile libraries.app.butterknife
+    compile libraries.app.timber
+    compile libraries.app.picasso
+
+    debugCompile libraries.app.leakCanary
+    releaseCompile libraries.app.leakCanaryNoOp
+
+    annotationProcessor libraries.apt.butterknife
 }
 
 android.applicationVariants.all { variant ->

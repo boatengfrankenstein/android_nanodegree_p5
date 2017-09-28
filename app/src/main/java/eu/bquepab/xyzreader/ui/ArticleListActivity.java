@@ -31,8 +31,6 @@ import eu.bquepab.xyzreader.data.UpdaterService;
 public class ArticleListActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, ArticleListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = ArticleListActivity.class.toString();
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.swipe_refresh_layout)

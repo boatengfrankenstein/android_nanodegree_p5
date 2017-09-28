@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import eu.bquepab.xyzreader.R;
 import eu.bquepab.xyzreader.data.ArticleLoader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import eu.bquepab.xyzreader.utils.DateUtils;
 import java.util.Date;
-import timber.log.Timber;
 
 public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
 
@@ -18,7 +16,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         void onClickedItem(long itemId);
     }
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
+
     private final Cursor cursor;
     private final OnItemClickListener clickListener;
 
@@ -40,23 +38,13 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         return new ArticleViewHolder(view, clickListener);
     }
 
-    private Date parsePublishedDate() {
-        try {
-            String date = cursor.getString(ArticleLoader.Query.PUBLISHED_DATE);
-            return dateFormat.parse(date);
-        } catch (ParseException ex) {
-            Timber.e(ex);
-            Timber.i("passing today's date");
-            return new Date();
-        }
-    }
-
     @Override
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
         cursor.moveToPosition(position);
         String title = cursor.getString(ArticleLoader.Query.TITLE);
         String author = cursor.getString(ArticleLoader.Query.AUTHOR);
-        Date publishedDate = parsePublishedDate();
+        String date = cursor.getString(ArticleLoader.Query.PUBLISHED_DATE);
+        Date publishedDate = DateUtils.parsePublishedDate(date);
         String thumbUrl = cursor.getString(ArticleLoader.Query.THUMB_URL);
         long itemId = getItemId(position);
 

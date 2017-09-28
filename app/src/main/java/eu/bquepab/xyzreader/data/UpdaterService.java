@@ -9,13 +9,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.RemoteException;
-import android.text.format.Time;
-import android.util.Log;
 import eu.bquepab.xyzreader.remote.RemoteEndpointUtil;
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import timber.log.Timber;
 
 public class UpdaterService extends IntentService {
     private static final String TAG = "UpdaterService";
@@ -29,12 +28,11 @@ public class UpdaterService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Time time = new Time();
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni == null || !ni.isConnected()) {
-            Log.w(TAG, "Not online, not refreshing.");
+            Timber.w("Not online, not refreshing.");
             return;
         }
 
@@ -72,7 +70,7 @@ public class UpdaterService extends IntentService {
             getContentResolver().applyBatch(ItemsContract.CONTENT_AUTHORITY, cpo);
 
         } catch (JSONException | RemoteException | OperationApplicationException e) {
-            Log.e(TAG, "Error updating content.", e);
+            Timber.e("Error updating content.", e);
         }
 
         sendStickyBroadcast(

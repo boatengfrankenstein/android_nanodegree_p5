@@ -111,8 +111,8 @@
     android:src="@drawable/ic_share_black_24dp"
     android:tint="@color/material_light_white"
     app:elevation="@dimen/fab_elevation"
+    app:pressedTranslationZ="@dimen/fab_press_translation_z"
     app:layout_anchor="@id/app_bar"
-    app:layout_anchorGravity="bottom|end|right"
-    app:pressedTranslationZ="@dimen/fab_press_translation_z" />
+    app:layout_anchorGravity="bottom|end|right" />
 
 </android.support.design.widget.CoordinatorLayout>

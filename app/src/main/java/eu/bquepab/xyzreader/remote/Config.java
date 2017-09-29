@@ -10,6 +10,7 @@ public class Config {
     static {
         URL url = null;
         try {
+            //Own copy of mocked data
             url = new URL(
                     "https://gist.githubusercontent.com/niltsiar/b7073b2c177543145343fd47b5062e41/raw/6cb374308058ab74db3a42cdee2278388e53efd2/xyz-reader.json");
         } catch (MalformedURLException ignored) {

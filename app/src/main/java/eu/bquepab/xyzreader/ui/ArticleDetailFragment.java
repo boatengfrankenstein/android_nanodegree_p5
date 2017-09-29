@@ -247,10 +247,17 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
         final String text;
         int itemCount;
         private static final int maxLines = 20;
+        private static final int HEADER = 1;
+        private static final int NO_HEADER = 2;
 
-        public ArticleBodyListAdapter(Context context, String text) {
+        ArticleBodyListAdapter(Context context, String text) {
             this.text = text;
             textView = new TextView(context);
+            textView.setPadding(context.getResources()
+                                       .getDimensionPixelSize(R.dimen.material_layout_keylines_screen_edge_margin), 0, context.getResources()
+                                                                                                                              .getDimensionPixelSize(
+                                                                                                                                      R.dimen.material_layout_keylines_screen_edge_margin),
+                                0);
             textView.setText(text);
 
             new Handler().post(new Runnable() {
@@ -270,10 +277,19 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
         }
 
         @Override
+        public int getItemViewType(int position) {
+            if (0 == position) {
+                return HEADER;
+            } else {
+                return NO_HEADER;
+            }
+        }
+
+        @Override
         public ArticleBodyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                                       .inflate(R.layout.list_item_article_body, parent, false);
-            return new ArticleBodyViewHolder(view);
+            return new ArticleBodyViewHolder(view, HEADER == viewType);
         }
 
         @Override
@@ -298,13 +314,19 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
         @BindView(R.id.article_body)
         TextView bodyView;
 
-        public ArticleBodyViewHolder(View view) {
+        ArticleBodyViewHolder(View view, boolean isHeader) {
             super(view);
 
             ButterKnife.bind(this, view);
+
+            if (isHeader) {
+                bodyView.setPadding(bodyView.getPaddingLeft(), view.getResources()
+                                                                   .getDimensionPixelSize(R.dimen.material_layout_keylines_screen_edge_margin),
+                                    bodyView.getPaddingRight(), bodyView.getPaddingBottom());
+            }
         }
 
-        public void bind(String body) {
+        void bind(String body) {
             bodyView.setText(body);
         }
     }
